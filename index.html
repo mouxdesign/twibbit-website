@@ -195,6 +195,18 @@ section.blk .partner p{max-width:none}
 .hw li.hot h3{color:#fff}
 .hw p{font-size:17.2px!important;line-height:1.5;color:var(--mute)}
 .hw li.hot p{color:#cfcde0!important}
+
+.hw li:not(:last-child)::after{content:"\2192";position:absolute;right:-21px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--line);color:var(--iris);display:grid;place-items:center;font:700 16px var(--head);z-index:2}
+@media(max-width:760px){.hw{gap:26px}.hw li:not(:last-child)::after{content:"\2193";right:auto;left:50%;top:auto;bottom:-28px;transform:translateX(-50%)}}
+.hw-kick2{margin-top:30px!important}
+.asks{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.asks li{display:grid;grid-template-columns:112px minmax(0,1fr);gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line)}
+.asks .big{font:800 44px/1 var(--head);letter-spacing:-.04em;color:var(--iris)}
+.asks .big small{font:600 17px var(--head);color:var(--faint);letter-spacing:0;margin-left:2px}
+.asks .txt{display:flex;flex-direction:column;gap:10px;color:var(--fg)}
+.asks .bar{height:6px;border-radius:99px;background:var(--band);overflow:hidden}
+.asks .bar i{display:block;height:100%;background:var(--iris);border-radius:99px}
+@media(max-width:560px){.asks li{grid-template-columns:86px minmax(0,1fr);gap:14px}.asks .big{font-size:36px}}
 .hw-kick{font:600 14.9px var(--head);text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin:10px 0 0!important}
 </style>
 </head>
@@ -275,11 +287,11 @@ section.blk .partner p{max-width:none}
    <li class="hot"><b class="n">2</b><h3>Twibbit adds the UX judgment</h3><p>It checks the screen the way a UX designer would, and flags anything people can't undo or won't understand.</p></li>
    <li><b class="n">3</b><h3>You ship something people can trust</h3><p>Clear states, safe confirmations and messages that say what actually happened.</p></li>
   </ol>
-  <p>What the builders we spoke to asked for first:</p>
-  <ol class="steps">
-   <li><b>1</b><span>An agent that follows bitcoin UX best practices without making things up (9 of 10)</span></li>
-   <li><b>2</b><span>To know where a design recommendation came from (6 of 10)</span></li>
-   <li><b>3</b><span>A way to check what their agent built against a named standard (5 of 10)</span></li>
+  <p class="hw-kick hw-kick2">What builders asked for first</p>
+  <ol class="asks">
+   <li><div class="big">9<small>/10</small></div><div class="txt"><span>An agent that follows bitcoin UX best practices without making things up</span><div class="bar"><i style="width:90%"></i></div></div></li>
+   <li><div class="big">6<small>/10</small></div><div class="txt"><span>To know where a design recommendation came from</span><div class="bar"><i style="width:60%"></i></div></div></li>
+   <li><div class="big">5<small>/10</small></div><div class="txt"><span>A way to check what their agent built against a named standard</span><div class="bar"><i style="width:50%"></i></div></div></li>
   </ol>
   <p class="more"><a class="chip-link" href="research.html#ch9">See every job builders asked for in the research report →</a></p>
  </section>
