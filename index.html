@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Twibbit, an open-source UX agent for bitcoin builders</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="An open-source UX agent for bitcoin builders who direct AI agents. Get told the day it lands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:wght@450;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--soft:#fafbfc;--fg:#121212;--mute:#565a61;--faint:#74787f;--line:#ecedef;--ink:#2f2f31;--iris:#6f63f5;--iris-soft:#6f63f51a;--iris-ring:#6f63f54d;--sun:#e4e0fe;--sun-soft:#e4e0fe;--deep:#16151e;--deep-2:#16151e;--glow:rgba(111,99,245,.45);--ok:#2f8a5f;--err:#cf5340;--band:#efeffb;--card:#fff;--card-line:#e1e0f3;--chip-hero:#ddd7fd;--chip-fg:#4a3fd0;--btn-bg:#16151e;--btn-fg:#fff;--btn-hover:#000;--input-bg:#fff;--input-line:#d8dade;--hot-line:#cfc8fb;
+ --head:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;--body:'Inter',-apple-system,system-ui,sans-serif;--serif:'Lora',Georgia,serif;color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.65 var(--body);-webkit-font-smoothing:antialiased;
+ padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.wrap{max-width:920px;margin:0 auto}
+nav{display:flex;justify-content:space-between;align-items:center;padding-block:18px}
+.logo{color:var(--fg);font:800 20px var(--head);letter-spacing:-.03em;display:flex;align-items:center;gap:9px}
+.logo img{width:28px;height:28px;display:block;border-radius:8px}
+.btn{font:600 14.5px var(--head);letter-spacing:-.01em;color:var(--btn-fg);background:var(--btn-bg);border:0;border-radius:999px;padding:12px 20px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+ box-shadow:0 8px 22px -10px var(--glow),0 1px 2px rgba(22,21,30,.3);transition:transform .15s,background .15s}
+.btn:hover{background:var(--btn-hover);transform:translateY(-1px)}
+.btn[disabled]{opacity:.6;cursor:default}
+:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
+.hero{background:var(--band);border-radius:28px;padding:clamp(24px,5vw,56px) clamp(16px,4vw,48px);margin-top:4px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);align-items:center;gap:clamp(12px,3vw,32px);text-align:left}
+.hero .copy{display:flex;flex-direction:column;align-items:flex-start;gap:18px;min-width:0}
+.hero .copy form{max-width:480px}
+.hero h1{font-size:clamp(30px,5.4vw,52px)}
+.mascot{width:100%;max-width:340px;height:auto;display:block;justify-self:center;filter:drop-shadow(0 16px 16px rgba(90,70,220,.25))}
+@media(max-width:540px){.hero{grid-template-columns:minmax(0,1fr);text-align:center}.hero .copy{align-items:center}.mascot{max-width:260px;margin-top:4px}}
+.hero h1 span{background:var(--chip-hero)}
+.tag{font:600 12.5px var(--head);color:var(--chip-fg);background:var(--sun-soft);border-radius:999px;padding:6px 12px}
+h1{font:700 clamp(36px,8.4vw,64px)/1.12 var(--head);letter-spacing:-.04em;margin:0;text-wrap:balance}
+h1 span{display:inline-block;background:var(--sun);border-radius:.2em;padding:.03em .16em .07em;line-height:1.04;margin-block:.08em}
+.lede{font-size:clamp(17px,2.4vw,19px);color:var(--mute);margin:0;max-width:52ch;text-wrap:pretty}
+form{width:100%;max-width:460px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input[type=email]{flex:1 1 220px;min-width:0;font:inherit;font-size:16px;color:var(--fg);background:var(--input-bg);border:1px solid var(--input-line);border-radius:12px;padding:13px 15px}
+input[type=email]:focus{outline:none;border-color:var(--iris);box-shadow:0 0 0 4px var(--sun-soft)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.msg{margin:0;font-size:14.5px;min-height:1.3em}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
+.fine{font:500 13px/1.5 var(--head);color:var(--faint);margin:0}
+.phonewrap{display:flex;flex-direction:column;align-items:center;gap:10px;padding-block:12px 40px}
+.phone{width:268px;max-width:100%;border:9px solid #1a1c1f;border-radius:44px;background:#fff;padding:26px 18px 22px;box-shadow:0 30px 60px -30px rgba(26,28,31,.35);position:relative}
+.phone::before{content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);width:76px;height:20px;background:#1a1c1f;border-radius:99px}
+.phone h4{font:700 16px var(--head);letter-spacing:-.02em;margin:10px 0 14px;text-align:center}
+.line{display:flex;justify-content:space-between;font-size:14px;padding:11px 0;border-bottom:1px solid var(--line)}
+.line b{font-family:var(--head);font-weight:600}.line span{color:var(--mute)}
+.line.t{border:0;padding-top:14px}.line.t b{font-size:16px}
+.fake{margin-top:12px;background:var(--ink);color:#fff;text-align:center;border-radius:12px;padding:12px;font:600 14px var(--head)}
+.cap{font:500 12.5px var(--head);color:var(--faint);margin:0;text-align:center}
+section.blk{padding-block:clamp(36px,6vw,64px);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:14px}
+.kick{font:450 18px var(--serif);color:var(--faint);margin:0}
+h2{font:700 clamp(26px,5vw,36px)/1.12 var(--head);letter-spacing:-.03em;margin:0;text-wrap:balance}
+section.blk p{margin:0;color:var(--mute);max-width:60ch}
+section.blk p.strong{color:var(--fg)}
+.steps{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.steps li{display:flex;gap:16px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:18px}
+.steps b{flex:none;width:30px;height:30px;border-radius:50%;background:var(--sun);color:var(--chip-fg);font:700 14px var(--head);display:grid;place-items:center}
+.steps span{color:var(--fg);padding-top:3px}
+.need{background:var(--iris-soft);border:1px dashed var(--iris);border-radius:8px;padding:3px 8px;color:var(--iris);font-size:15px}
+.cta{margin:20px 0 56px;background:var(--deep);color:#fff;border-radius:24px;padding:clamp(28px,6vw,52px);display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
+.cta h2{color:#fff}
+.cta input[type=email]{border-color:#3a3850;background:#0f0e15;color:#fff}
+.cta .btn{background:#fff;color:#16151e;box-shadow:0 8px 24px -8px var(--glow)}.cta .btn:hover{background:#e4e0fe}.cta h2 span{display:inline-block;background:#e4e0fe;color:#16151e;border-radius:.2em;padding:.03em .16em .07em;line-height:1.1;margin-block:.06em}
+.cta .fine{color:#a9a7bd}.cta .msg.ok{color:#7fd1a6}.cta .msg.err{color:#ff9a8a}
+section.blk.dark{background:var(--deep);color:#fff;border:0;border-radius:24px;padding:clamp(28px,6vw,52px);margin-block:clamp(28px,5vw,48px)}
+section.blk.dark .kick{color:#a9a7bd}section.blk.dark h2{color:#fff}section.blk.dark p{color:#cfcde0}
+section.blk.dark blockquote{color:#fff;border-left-color:#cfc8fb}section.blk.dark cite{color:#a9a7bd}
+section.blk.dark .stat{background:#201f2c;border-color:#34324a}section.blk.dark .stat b{color:#cfc8fb}section.blk.dark .stat span{color:#cfcde0}
+section.blk.soft{background:var(--band);border:0;border-radius:24px;padding:clamp(28px,6vw,52px);margin-block:clamp(20px,4vw,40px)}
+section.blk.soft .stat,section.blk.soft .dots,section.blk.soft .steps li,section.blk.soft .step{background:var(--card);border-color:var(--card-line)}
+section.blk.soft .kick{color:var(--faint)}
+.brand{position:relative;overflow:hidden;background:var(--band);border-radius:28px;margin:0 0 28px;padding:clamp(28px,6vw,64px) 12px 0;text-align:center}
+.brand .word{font:800 clamp(64px,19vw,220px)/.92 var(--head);letter-spacing:-.065em;color:var(--fg);margin:0;user-select:none}
+.brand .cut{filter:drop-shadow(0 16px 16px rgba(90,70,220,.25));position:relative;display:block;width:min(52%,360px);height:auto;margin:calc(-1 * clamp(34px,10vw,120px)) auto 0}
+.btn{min-height:44px;-webkit-tap-highlight-color:transparent}
+form .btn{min-height:48px;padding-inline:22px}
+@media(max-width:540px){form .row .btn{flex:1 1 100%;justify-content:center}input[type=email]{min-height:48px}.cta .btn{width:100%}}
+footer{padding-bottom:max(40px,env(safe-area-inset-bottom,0px))}
+footer{padding-block:0 40px;font:500 13.5px var(--head);color:var(--faint);text-align:center}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:6px 0 2px}
+@media(max-width:560px){.stats{grid-template-columns:minmax(0,1fr)}}
+.stat{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
+.stat b{font:700 30px/1 var(--head);letter-spacing:-.03em;color:var(--iris)}
+.stat span{font-size:14.5px;line-height:1.45;color:var(--mute)}
+blockquote{margin:4px 0;padding:2px 0 2px 18px;border-left:3px solid var(--iris-ring);font:450 clamp(18px,3vw,21px)/1.5 var(--serif);color:var(--fg);max-width:56ch}
+blockquote cite{display:block;margin-top:6px;font:500 13.5px var(--head);font-style:normal;color:var(--faint)}
+.small{font-size:14px;color:var(--faint)}
+.support{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.logos{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.logo-slot{height:64px;min-width:150px;padding:0 22px;border:1px solid var(--line);border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center}
+.logo-slot img{max-height:34px;max-width:160px;display:block}
+.logo-slot .fallback{display:none;font:700 17px var(--head);letter-spacing:-.02em;color:var(--mute)}
+.logo-slot{gap:12px}.logo-slot{height:92px}.logo-slot img.mark{height:58px;width:auto;max-width:none}.logo-slot .nm{font:700 18px var(--head);letter-spacing:-.02em;color:var(--fg)}.logo-slot.bdc{min-width:0;padding:0 18px}.logo-slot.bdc{height:92px}.logo-slot.bdc img{max-height:76px;width:76px;height:76px}
+.dots{display:flex;flex-direction:column;gap:12px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:22px}
+.dots svg{width:100%;max-width:520px;height:auto}
+.dots p{margin:0;font:500 14.5px/1.5 var(--head);color:var(--mute)}
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:stretch;margin:6px 0 4px}
+@media(max-width:620px){.flow{grid-template-columns:1fr}.flow .arr{transform:rotate(90deg);justify-self:center}}
+.step{background:var(--soft);border:1px solid var(--line);border-radius:18px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.step.hot{background:var(--sun-soft);border-color:var(--hot-line)}
+.step svg{width:44px;height:44px;color:var(--mute)}.step.hot svg{color:var(--iris)}
+.step b{font:700 16px/1.25 var(--head);letter-spacing:-.02em}
+.step span{font-size:14px;line-height:1.45;color:var(--mute)}
+.arr{align-self:center;color:var(--iris);font:600 22px var(--head)}
+nav{gap:12px}.logo{white-space:nowrap}nav .btn{white-space:nowrap;padding:10px 14px}@media(max-width:380px){.logo{font-size:15px;gap:7px}.logo img{width:24px;height:24px}nav .btn{font-size:13px;padding:10px 12px}nav{gap:8px}}
+.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links a.t{font:600 14.5px var(--head);color:var(--mute);text-decoration:none;padding:10px 12px;border-radius:999px;min-height:44px;display:inline-flex;align-items:center}
+.nav-links a.t:hover{color:var(--fg);background:var(--band)}
+.chip-link{font:600 15.5px var(--head);color:var(--chip-fg);text-decoration:underline;text-underline-offset:3px}
+.chip-link:hover{color:var(--iris)}
+section.blk.dark .chip-link{color:#cfc8fb}
+blockquote cite a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+section.blk p.more{margin:2px 0 0}
+section.blk.dark a.btn{background:#fff;color:#16151e;align-self:flex-start}section.blk.dark a.btn:hover{background:#e4e0fe}
+footer a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:420px){.nav-links a.t{font-size:13px;padding:10px 8px}.nav-links{gap:2px}}
+.partners{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:8px}
+@media(max-width:560px){.partners{grid-template-columns:minmax(0,1fr)}}
+.partner{background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+section.blk .partner p{max-width:none}
+.plabel{font:600 11.5px var(--head)!important;text-transform:uppercase;letter-spacing:.12em;color:var(--faint)!important;margin:0}
+.plogo{display:block;height:120px;width:auto;max-width:100%;margin-block:4px 6px}
+.plogo.spiral{height:112px}
+.pname{font:700 20px/1.2 var(--head);letter-spacing:-.02em;margin:0;color:var(--fg);text-transform:none}
+.pdesc{margin:0;font-size:15px;line-height:1.55;color:var(--mute)}
+.plink{display:flex;flex-direction:column;align-items:flex-start;gap:12px;text-decoration:none;color:inherit;border-radius:12px}
+.plink .pname span{color:var(--iris);font-weight:600}
+.plink:hover .pname{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:540px){.plabel{font-size:13px!important}.brand .cut{margin-top:calc(-1 * clamp(14px,4vw,40px))}.logo{min-height:44px}.nav-links a.t{padding:12px 6px}footer a,.foot a{display:inline-block;padding:10px 2px}.plink{display:block;min-height:44px}.btn{min-height:44px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <nav><div class="logo"><img src="assets/twibbit-icon.png" alt="" width="28" height="28">Twibbit</div><div class="nav-links"><a class="t" href="research.html">Research</a><a class="btn" href="#join">Join the waitlist</a></div></nav>
+
+ <header class="hero">
+  <div class="copy">
+  <h1>Your AI agent writes the app. Give it a UX designer's <span>judgment.</span></h1>
+  <p class="lede">An open-source UX agent for bitcoin builders who direct AI agents is on its way. It's being built to help your agent ship apps that are well designed and that people actually want to use.</p>
+  <form class="signup" id="join" novalidate>
+   <div class="row">
+    <input name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" aria-label="Your email" required>
+    <button class="btn" type="submit">Tell me when it lands</button>
+   </div>
+   <div class="hp" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off"></label></div>
+   <p class="msg" role="status" aria-live="polite"></p>
+   <p class="fine">We will only use your email to tell you when the agent launches. No spam, and you can unsubscribe at any time.</p>
+  </form>
+  </div>
+  <img class="mascot" src="assets/twibbit-cutout.png" alt="Twibbit, a friendly purple pixel mascot giving a wink" width="260" height="252">
+ </header>
+
+ <section class="blk">
+  <p class="kick">The problem</p>
+  <h2>You're not a designer. Your agent isn't either.</h2>
+  <p>You direct an AI agent to build your bitcoin app. It writes the code fast. But nobody on the team is a UX specialist, so nobody is checking how the app actually feels to the person using it.</p>
+  <p>In bitcoin that gap costs more than in most apps. People are moving real money, and some actions cannot be undone.</p>
+ </section>
+
+ <section class="blk soft">
+  <p class="kick">Where agents go wrong</p>
+  <h2>7 in 10 builders saw their AI get it wrong.</h2>
+  <p>We interviewed 10 bitcoin builders about how they really build with AI. 7 of the 10 had AI output that was made up, wrong or misaligned with what they asked for.</p>
+  <blockquote>"Sometimes it just made up, hallucinated and I had to give it the documentation to see how it was supposed to build it."<cite>A bitcoin builder, from <a href="research.html#ch6">our research interviews</a></cite></blockquote>
+  <div class="dots" role="img" aria-label="Seven of ten builders filled, three outlined">
+   <svg viewBox="0 0 520 64" aria-hidden="true">
+    <g transform="translate(4,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(56,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(108,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(160,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(212,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(264,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(316,0)"><circle cx="24" cy="18" r="11" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="#6f63f5" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(368,0)"><circle cx="24" cy="18" r="11" fill="none" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="none" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(420,0)"><circle cx="24" cy="18" r="11" fill="none" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="none" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g><g transform="translate(472,0)"><circle cx="24" cy="18" r="11" fill="none" stroke="#6f63f5" stroke-width="2.5"/><path d="M4 56c0-12 9-20 20-20s20 8 20 20z" fill="none" stroke="#6f63f5" stroke-width="2.5" stroke-linejoin="round"/></g>
+   </svg>
+   <p><b style="color:var(--iris)">7 of 10</b> builders had AI output that was made up, wrong or misaligned.</p>
+  </div>
+  <div class="stats">
+   <div class="stat"><b>5 of 10</b><span>say a human reviewing the agent's work is now the bottleneck</span></div>
+   <div class="stat"><b>4 of 10</b><span>needed the AI's UX or copy polished by a human</span></div>
+   <div class="stat"><b>6 of 10</b><span>make UX decisions without a UX specialist</span></div>
+  </div>
+  <p class="more"><a class="chip-link" href="research.html#ch6">Read chapter 6 of the research report: Seven in ten saw the AI get it wrong →</a></p>
+ </section>
+
+ <section class="blk">
+  <p class="kick">What it is</p>
+  <h2>An open-source UX agent you give to your own agent.</h2>
+  <p>An open-source UX agent, or skill pack, that you hand to the AI agent you already use. It carries a UX designer's judgment about how bitcoin apps should look and behave, so your agent can make better decisions without you becoming a designer.</p>
+  <div class="flow" role="img" aria-label="You direct your agent, the UX agent adds design judgment, your app ships well designed">
+   <div class="step"><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="9" width="32" height="22" rx="4"/><path d="M15 38h14M22 31v7M15 18l4 4-4 4M23 26h6"/></svg><b>You direct your agent</b><span>It writes the code, fast</span></div>
+   <div class="arr" aria-hidden="true">→</div>
+   <div class="step hot"><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 5l3.6 9.2L35 17.6l-9.4 3.6L22 30.4l-3.6-9.2L9 17.6l9.4-3.4z"/><path d="M34 29l1.6 4 4 1.6-4 1.6L34 40l-1.6-3.8-4-1.6 4-1.6z"/></svg><b>The UX agent adds design judgment</b><span>So it stops guessing</span></div>
+   <div class="arr" aria-hidden="true">→</div>
+   <div class="step"><svg viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="12" y="4" width="20" height="36" rx="5"/><path d="M18 11h8M17 22l4 4 7-8"/></svg><b>Your app ships well designed</b><span>And people actually use it</span></div>
+  </div>
+  <p>What the builders we spoke to asked for first:</p>
+  <ol class="steps">
+   <li><b>1</b><span>An agent that follows bitcoin UX best practices without making things up (9 of 10)</span></li>
+   <li><b>2</b><span>To know where a design recommendation came from (6 of 10)</span></li>
+   <li><b>3</b><span>A way to check what their agent built against a named standard (5 of 10)</span></li>
+  </ol>
+  <p class="more"><a class="chip-link" href="research.html#ch9">See every job builders asked for in the research report →</a></p>
+ </section>
+
+ <section class="blk dark">
+  <p class="kick">Built with builders</p>
+  <h2>we asked 10 bitcoin builders how they really build.</h2>
+  <p>Every one of them uses AI to write code. Most act as the director: they steer the agent and review what it writes. Nine in ten asked for the same thing, a skill or an agent their AI can connect to.</p>
+  <blockquote>"I don't write code anymore, but I direct."<cite>A bitcoin builder, from <a href="research.html#ch1">our research interviews</a></cite></blockquote>
+  <div class="stats">
+   <div class="stat"><b>10 of 10</b><span>use AI to help write code</span></div>
+   <div class="stat"><b>6 of 10</b><span>use portable skill or instruction files</span></div>
+   <div class="stat"><b>9 of 10</b><span>asked for a skill or agent their AI can connect to</span></div>
+  </div>
+  <a class="btn" href="research.html">Read the full research report</a>
+ </section>
+
+ <section class="blk soft">
+  <p class="kick">Who it's for</p>
+  <h2>Builders with no UX specialist on the team.</h2>
+  <ol class="steps">
+   <li><b>1</b><span>Solo builders and small teams building bitcoin apps with an AI agent</span></li>
+   <li><b>2</b><span>People who want the app to feel right without becoming designers</span></li>
+   <li><b>3</b><span>Anyone who has watched an agent get the details of a payment screen wrong</span></li>
+  </ol>
+  <p class="more">Most of the builders we interviewed work solo or in a small team and steer an AI agent to build. <a class="chip-link" href="research.html#ch1">See who they are in the research report →</a></p>
+ </section>
+
+ <section class="blk">
+  <p class="kick">Who is building it</p>
+  <h2>Open source, and built in public.</h2>
+  <p>We're building it openly, so you can see how it develops and tell us what your agent gets wrong. We're aiming to launch an MVP (a first working version) at the end of November. If you want to get your hands on it, drop your email below.</p>
+  <p>I'm Mogashni, a UX designer and researcher. I specialize in bitcoin and Lightning wallet UX.</p>
+  <p class="more"><a class="chip-link" href="research.html#how">How Twibbit is being built from the research →</a> <span class="small">or <a class="chip-link" href="research.html#ch10">see the stages ahead</a></span></p>
+  <div class="partners">
+   <div class="partner"><p class="plabel">Built in public by</p><a class="plink" href="https://bitcoin.design/" target="_blank" rel="noopener noreferrer" aria-label="Bitcoin Design Community, opens in a new tab"><img class="plogo bdc" src="assets/bitcoin-design-community.png" alt="" width="120" height="120"><h3 class="pname">Bitcoin Design Community <span aria-hidden="true">↗</span></h3></a><p class="pdesc">An open community stewarding the Bitcoin Design Guide as a shared resource for builders.</p></div>
+   <div class="partner"><p class="plabel">Supported by</p><a class="plink" href="https://spiral.xyz/about/" target="_blank" rel="noopener noreferrer" aria-label="Spiral, opens in a new tab"><img class="plogo spiral" src="assets/spiral.png" alt="" width="104" height="120"><h3 class="pname">Spiral <span aria-hidden="true">↗</span></h3></a><p class="pdesc">Spiral builds and funds public goods that make money and intelligence more open, secure, and accessible.</p></div>
+  </div>
+ </section>
+
+ <div class="cta">
+  <h2>Get told the day it <span>lands.</span></h2>
+  <form class="signup" novalidate>
+   <div class="row">
+    <input name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" aria-label="Your email" required>
+    <button class="btn" type="submit">Tell me when it lands</button>
+   </div>
+   <div class="hp" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off"></label></div>
+   <p class="msg" role="status" aria-live="polite"></p>
+   <p class="fine">No spam. Unsubscribe at any time.</p>
+  </form>
+ </div>
+ <div class="brand" aria-label="Twibbit"><p class="word" aria-hidden="true">Twibbit</p><img class="cut" src="assets/twibbit-cutout.png" alt="Twibbit, a friendly purple pixel mascot giving a wink" width="285" height="295"></div>
+
+ <footer>Built by Mogashni, UX designer and researcher, working in public. <a href="research.html">Read the research report</a>.</footer>
+</div>
+<script>
+/* Paste your Google Apps Script web app URL between the quotes. See SETUP.md. */
+var ENDPOINT = "";
+document.querySelectorAll('form.signup').forEach(function(f){
+ var em=f.querySelector('input[name=email]'),b=f.querySelector('button'),msg=f.querySelector('.msg');
+ function say(t,c){msg.textContent=t;msg.className='msg '+(c||'')}
+ f.addEventListener('submit',function(e){
+  e.preventDefault();
+  var v=em.value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){say('That email does not look right. Please check it.','err');em.focus();return}
+  if(f.querySelector('input[name=company]').value){return}
+  if(!ENDPOINT){say('This page is not connected yet. See SETUP.md.','err');return}
+  b.disabled=true;say('Saving…');
+  fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({email:v,source:location.search||'direct'})})
+  .then(function(){f.reset();b.disabled=false;say("You're on the list. We'll email you the day it lands.",'ok')})
+  .catch(function(){b.disabled=false;say('Something went wrong. Please try again.','err')});
+ });
+});
+</script>
+</body>
+</html>
