@@ -163,7 +163,7 @@ section.blk .partner p{max-width:none}
    </div>
    <div class="hp" aria-hidden="true"><label>Leave this empty <input name="company" tabindex="-1" autocomplete="off"></label></div>
    <p class="msg" role="status" aria-live="polite"></p>
-   <p class="fine">We will only use your email to tell you when the agent launches. No spam, and you can unsubscribe at any time.</p>
+   <p class="fine">We will only use your email to tell you when the agent launches and when we ship updates. No spam, and you can unsubscribe at any time.</p>
   </form>
   </div>
   <img class="mascot" src="assets/twibbit-cutout.png" alt="Twibbit, a friendly purple pixel mascot giving a wink" width="260" height="252">
@@ -281,7 +281,7 @@ document.querySelectorAll('form.signup').forEach(function(f){
   if(!ENDPOINT){say('This page is not connected yet. See SETUP.md.','err');return}
   b.disabled=true;say('Saving…');
   fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({email:v,source:location.search||'direct'})})
-  .then(function(){f.reset();b.disabled=false;say("You're on the list. We'll email you the day it lands.",'ok')})
+  .then(function(){f.reset();b.disabled=false;say("You're on the list. We'll email you the day it lands, and when we ship updates.",'ok')})
   .catch(function(){b.disabled=false;say('Something went wrong. Please try again.','err')});
  });
 });
